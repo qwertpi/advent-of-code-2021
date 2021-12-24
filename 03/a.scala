@@ -8,20 +8,17 @@ object ThreeA extends App{
 	val timer: ThreadMXBean = ManagementFactory.getThreadMXBean()
 	val start: Long = timer.getCurrentThreadCpuTime()
 
-	def most_common_bit(binary: Iterator[String], position: Int): Char ={
-		var zeros_count: Int = 0
-		var ones_count: Int = 0
+	def most_common_bit(binary: Array[String], position: Int): Char ={
+		val relevant_binary: Array[Char] = binary.map(_(position))
+		val zeros_count: Int = relevant_binary.count(_ == '0')
+		val ones_count: Int = relevant_binary.count(_ == '1')
 
-		binary.foreach(_(position) match{
-			case '0' => zeros_count += 1
-			case '1' => ones_count += 1
-		})
 		if (zeros_count < ones_count){
 			return '1'
 		}
 		return '0'
 	}
-	def least_common_bit(binary: Iterator[String], position: Int): Char ={
+	def least_common_bit(binary: Array[String], position: Int): Char ={
 		return most_common_bit(binary, position) match{
 			case '0' => '1'
 			case '1' => '0'
@@ -31,13 +28,14 @@ object ThreeA extends App{
 	def binary_to_denary(binary: String): Int ={
 		return parseInt(binary, 2)
 	}
-	def get_rate(bit_extractor: (Iterator[String], Int) => Char, rates_bit_length: Int): Int ={
-		return binary_to_denary((0 until rates_bit_length).map(bit_extractor(fromFile("input.txt").getLines, _)).mkString)
+	def get_rate(bit_extractor: (Array[String], Int) => Char, input: Array[String], rates_bit_length: Int): Int ={
+		return binary_to_denary((0 until rates_bit_length).map(bit_extractor(input, _)).mkString)
 	}
 
 	val rates_bit_length: Int = fromFile("input.txt").getLines.next().length
-	val gamma_rate: Int = get_rate(most_common_bit, rates_bit_length)
-	val epsilon_rate: Int = get_rate(least_common_bit, rates_bit_length)
+	val input: Array[String] = fromFile("input.txt").getLines.toArray
+	val gamma_rate: Int = get_rate(most_common_bit, input, rates_bit_length)
+	val epsilon_rate: Int = get_rate(least_common_bit, input, rates_bit_length)
 	val answer: Int = gamma_rate * epsilon_rate
 
 	val end: Long = timer.getCurrentThreadCpuTime()
