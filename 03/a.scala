@@ -19,10 +19,7 @@ object ThreeA extends App{
 		return '0'
 	}
 	def least_common_bit(binary: Array[String], position: Int): Char ={
-		return most_common_bit(binary, position) match{
-			case '0' => '1'
-			case '1' => '0'
-		}
+		return Map('0' -> '1', '1' -> '0')(most_common_bit(binary, position))
 	}
 
 	def binary_to_denary(binary: String): Int ={
