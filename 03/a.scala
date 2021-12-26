@@ -29,8 +29,8 @@ object ThreeA extends App{
 		return binary_to_denary((0 until rates_bit_length).map(bit_extractor(input, _)).mkString)
 	}
 
-	val rates_bit_length: Int = fromFile("input.txt").getLines.next().length
 	val input: Array[String] = fromFile("input.txt").getLines.toArray
+	val rates_bit_length: Int = input(0).length
 	val gamma_rate: Int = get_rate(most_common_bit, input, rates_bit_length)
 	val epsilon_rate: Int = get_rate(least_common_bit, input, rates_bit_length)
 	val answer: Int = gamma_rate * epsilon_rate
